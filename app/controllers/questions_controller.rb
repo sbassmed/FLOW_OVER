@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
 before_action :authenticate_user!, :except => [:show, :index]
 
   def index
-    @questions = Question.all
+    @questions = Question.order("updated_at DESC")
   end
 
   def new
@@ -16,6 +16,7 @@ before_action :authenticate_user!, :except => [:show, :index]
 
   def show
     @question = Question.find(params[:id])
+    @comment = Comment.new
   end
 
   def create

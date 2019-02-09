@@ -1,17 +1,16 @@
 # == Schema Information
 #
-# Table name: questions
+# Table name: answers
 #
 #  id          :integer          not null, primary key
-#  user_id     :integer
-#  title       :string
 #  description :text
+#  user_id     :integer
+#  question_id :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 
-class Question < ApplicationRecord
+class Answer < ApplicationRecord
   belongs_to :user
-
-  has_many :answers
+  belongs_to :question
 end

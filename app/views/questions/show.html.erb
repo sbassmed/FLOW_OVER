@@ -1,17 +1,35 @@
 <div class="container question-page mx-auto">
+  <div class="container">
+    <div class="row">
+      <!-- Votos preguntas -->
+      <div class="container Vote">
+        <div class="row">
+          <% if @question.votes.exists?(user: current_user) %>
+            <%= link_to delete_vote_path(@question.id), method: :post, class: "question-upvote upvote-active" do %>
+               <h5>Votos <%= @question.votes.count%> </h5>
+            <% end %>
+          <% else %>
+            <%= link_to vote_question_path(@question.id), method: :post, class: "question-upvote" do %>
+            <h5>Votos <%= @question.votes.count%> </h5>
+            <% end %>
+          <% end %>
+        </div>
+        <div>
+      </div>
+    </div>
+
+  </div>
   <div class="row">
-    <div class="col-sm-10 mr-auto">
-      <h2><%= @question.title %></h2>
+    <div class="col mr-auto">
       <div class="description">
         <div class="container">
-            <p><%= @question.description %></p>
-            <p><%= @question.id %> Q ID</p>
-            <p><%= @question.user_id %>User ID</p>
-            <p><%= @question.user.email %>User ID</p>
-            <p><% if signed_in?%>
-                <%= current_user.email %>Current ID
-                <%end%>
-            </p>
+          <div class="card" >
+            <div class="card-body">
+              <h5 class="card-title"><%= @question.title %></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><%= @question.user.email %></h6>
+              <p class="card-text"><%= @question.description %></p>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="Home">
@@ -30,11 +48,17 @@
             </div>
             <% end %>
         </div>
+
         <hr />
 
 
         <div class="Comentarios">
-          <h4>Comentarios</h4>
+          <div class="Comentario cont">
+            <h4>Comentarios</h4>
+  	        <% unless @question.comments.count == 0%>
+  	          <h4>(<%= @question.comments.count %>) Comentarios</h4>
+  	        <% end %>
+          </div>
 
           <%@question.comments.each do |comment| %>
             <div class="panel panel-default bg-light rounded border">
@@ -69,7 +93,13 @@
 
 
         <div class="Respuestas">
-          <h4>Respuestas</h4>
+  <!--  Votos respuesta-->
+          <div class="Respuesta cont">
+  	        <% unless @question.answers.count == 0 %>
+  	          <h4>(<%= @question.answers.count %>) Respuestas</h4>
+  	        <% end %>
+          </div>
+
           <%@question.answers.each do |answer| %>
             <div class="panel panel-default bg-light rounded border">
               <div class="container">
@@ -82,25 +112,30 @@
               </div>
             </div>
           <% end %>
+
           <br />
           <div class="Res-comments">
 
           </div>
-        <div class="Res-pregunta">
-            <!-- Porque no puedeo habilitarla solo cuando sean usuarios diferentes  -->
+
+          <!--  Respuesta a pregunta-->
+        <% unless current_user == @question.user %>
+          <div class="Res-pregunta">
+          <!-- Porque no puedeo habilitarla solo cuando sean usuarios diferentes  -->
           <% if user_signed_in? %>
           <hr>
-          <h4>Tu Respuesta</h4>
+            <h4>Tu Respuesta</h4>
             <%= form_for @answer, :url => answers_path do |f| %>
               <%= f.hidden_field :question_id, value: @question[:id] %>
               <%= f.hidden_field :user_id, value: current_user[:id] %>
               <div class="form-group">
-               <%= f.text_area :description, rows: 3, class: "form-control", placeholder:"Escribe tu respuesta a la pregunta" %>
+                <%= f.text_area :description, rows: 3, class: "form-control", placeholder:"Escribe tu respuesta a la pregunta" %>
               </div>
-               <%= f.submit 'Enviar Respuesta', class: 'btn btn-link' %>
-             <% end %>
+              <%= f.submit 'Enviar Respuesta', class: 'btn btn-link' %>
+            <% end %>
           <% end %>
-        </div>
+          </div>
+        <%end%>
 
 
 

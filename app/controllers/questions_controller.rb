@@ -18,6 +18,7 @@ before_action :authenticate_user!, :except => [:show, :index]
     @question = Question.find(params[:id])
     @comment = Comment.new
     @answer = Answer.new
+    @vote = Vote.new
   end
 
   def create
@@ -50,6 +51,26 @@ before_action :authenticate_user!, :except => [:show, :index]
        redirect_to questions_path
   end
 
+# VOTOSSSS
+
+def voteup
+  question = Question.find(params[:id])
+  question.votes.create(user: current_user)
+
+  flash[:success] = "Gracias #{current_user.email} por votar!"
+    redirect_to question_path
+
+  end
+
+
+def votedown
+  question = Question.find(params[:id])
+  question.votes.where(user: current_user).take.try(:destroy)
+
+  flash[:danger] = "Vote eliminado!"
+    redirect_to question_path
+
+end
 
  private
 

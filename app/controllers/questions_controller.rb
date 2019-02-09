@@ -17,13 +17,14 @@ before_action :authenticate_user!, :except => [:show, :index]
   def show
     @question = Question.find(params[:id])
     @comment = Comment.new
+    @answer = Answer.new
   end
 
   def create
   @question = Question.create(questions_params)
   @question.user = current_user
   if @question.save
-   flash[:success] = "Pregunta publicada exitosamente"
+   flash[:success] = "Pregunta publicada"
       redirect_to questions_path(@question)
     else
        flash[:danger] = "#{@question.errors.messages}"
@@ -34,7 +35,7 @@ before_action :authenticate_user!, :except => [:show, :index]
    def update
     @question = Question.find(params[:id])
     if @question.update(questions_params)
-      flash[:notice] = "Tu pregunta ha sido modificada"
+      flash[:warning] = "Tu pregunta ha sido modificada"
         redirect_to questions_path(@question)
     else
       flash[:danger] = "#{@question.errors.messages}"
@@ -43,7 +44,7 @@ before_action :authenticate_user!, :except => [:show, :index]
   end
 
    def destroy
-      question =Question.find(params[:id])
+      question = Question.find(params[:id])
       question.destroy
 
        redirect_to questions_path

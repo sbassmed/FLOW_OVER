@@ -7,11 +7,15 @@ class CommentsController < ApplicationController
 		if @comment.save
 			flash[:success] = "Se ha añadido tu comentario!"
 		else
-			flash[:danger] = "#{@comment.errors.messages}"
+			flash[:danger] = " Error en comentario se debe a #{@comment.errors.messages}"
 		end
 
-    comment_params[:commentable_type] == 'Question'
+    if comment_params[:commentable_type] == 'Question'
         redirect_to question_path(comment_params[:commentable_id])
+    else
+        @answer = Answer.find(comment_params[:commentable_id])
+        redirect_to question_path(@answer.question_id)
+    end
 
   end
 

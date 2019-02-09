@@ -1,0 +1,53 @@
+<!-- <div class="container">
+  <div class="row">
+    <%if user_signed_in?%>
+     <%= link_to "Ask a question", new_question_path, class: "btn btn-info pull-right" %>
+    <%else%>
+      <%= link_to  new_user_session_path, class: "btn btn-info pull-right" %>
+    <%end%>
+    <div class="panel panel-default" style="margin-top:50px">
+      <div class="panel-heading">
+          <h3>Questions</h3>
+      </div>
+      <div class="panel-body  body">
+    </div>
+    </div>
+  </div>
+</div> -->
+<div class="container questions-page">
+  <br />
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Preguntas</h1>
+
+      <div class="float-right">
+        <%if user_signed_in?%>
+        <%= link_to "Hacer una Pregunta", new_question_path, class: "btn btn-primary" %>
+        <%else%>
+        <%= link_to "Hacer una Pregunta", new_user_session_path, class: "btn btn-primary" %>
+        <%end%>
+      </div>
+
+      <table class="table questions-list">
+        <tbody>
+          <% @questions.each do |question| %>
+            <tr>
+              <td class="metric">
+                <span class="metric-value"><%= question.votes.count %></span>
+                <span class="metric-label">Votos</span>
+              </td>
+              <td class="metric">
+                <span class="metric-value"><%= question.answers.count %></span>
+                <span class="metric-label">Respuestas</span>
+              </td>
+              <td class="question-info">
+                <span class="question-title"><%= link_to question.title, question %></span>
+                <%= question.description[0..100]%>... <span class="question-details text-muted">   Preguntó <%= question.user.email %> hace <%= distance_of_time_in_words(question.created_at, Date.current) %></span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

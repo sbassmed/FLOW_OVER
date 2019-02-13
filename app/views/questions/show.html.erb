@@ -63,7 +63,7 @@
           <%@question.comments.each do |comment| %>
             <div class="panel panel-default bg-light rounded border">
               <div class="container">
-                <div class="panel-body" >
+                <div class="panel-body bg-transparent border-info" >
                   <%= comment.body %>
                 </div>
                 <div class="panel-heading text-right">
@@ -73,7 +73,7 @@
             </div>
           <% end %>
         </div>
-        <% if signed_in? && @question.user == current_user %>
+        <% if signed_in? %>
       		<%= form_for @comment, :url => comments_path do |f| %>
       		<div class="form-group">
       			<p>
@@ -99,22 +99,38 @@
   	          <h4>(<%= @question.answers.count %>) Respuestas</h4>
   	        <% end %>
           </div>
-
           <%@question.answers.each do |answer| %>
-            <div class="panel panel-default bg-light rounded border">
-              <div class="container">
-                <div class="panel-body" >
-                  <%= answer.description %>
-                </div>
-                <div class="panel-heading text-right">
-                  <span class="text-muted"><%= "#{answer.user.email} #{time_ago_in_words(answer.created_at)} el #{l(answer.created_at, format: :long)}" %></span>
-                </div>
-              </div>
+          <div class="card bg-light mb-3">
+            <div class="card-header bg-transparent border-warning "><span class="blockquote-footer"><%= "#{answer.user.email} #{time_ago_in_words(answer.created_at)} el #{l(answer.created_at, format: :long)}" %></span></div>
+              <div class="card-body">
+              <h8 class="card-title">Respondio</h8>
+              <p><cite><%= answer.description %></cite></p>
             </div>
+          </div>
           <% end %>
+        </div>
+
 
           <br />
           <div class="Res-comments">
+            <% if signed_in? && @question.answers.exists? %>
+          	<%= form_for @comment, :url => comments_path do |f| %> <!--#Tambien funciona con  @question.answers.build-->
+          	<div class="form-group">
+          		<p>
+          			<%= f.hidden_field :commentable_type, value: "Answer" %>
+          			<%= f.hidden_field :commentable_id, value: @answer[:id] %>
+          			<%= f.hidden_field :user_id, value: current_user[:id]  %>
+          			<%= f.text_area :body, class: "form-control", placeholder: "Comenta esta Respuesta", rows: 2 %>
+          		</p>
+          	</div>
+          	<div class="actions text-right">
+          		<%= f.submit "Comentar", class: "btn btn-link btn-sm"%>
+          	</div>
+          	<% end %>
+          	<% end %>
+            <div class="">
+
+            </div>
 
           </div>
 

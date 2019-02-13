@@ -13,6 +13,9 @@ class AnswersController < ApplicationController
     end
   end
 
+
+    #
+
   def destroy
     @answer = Answer.find(params[:id])
     if @answer.destroy
@@ -26,6 +29,6 @@ class AnswersController < ApplicationController
   private
 
     def answer_params
-      params.require(:answer).permit(:description, :votes, :user_id, :question_id)
+      params.require(:answer).permit(:description, :votes, :user_id, :question_id,:answer_id)
     end
 end

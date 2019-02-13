@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
 
 	def create
-		@comment = Comment.new(comment_params)
+  		@comment = Comment.new(comment_params)
 		if @comment.save
 			flash[:success] = "Se ha añadido tu comentario!"
 		else
